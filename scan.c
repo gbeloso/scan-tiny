@@ -22,7 +22,7 @@ int mapeamento(char caracter){
     else if(caracter == 125){
         return(6);
     }
-    else if(caracter == 32){
+    else if((caracter == 32)||(caracter == 0)||(caracter >= 7)&&(caracter <= 13)){
         return(7);
     }
     else {
@@ -47,7 +47,12 @@ int main(int argc, char ** argv) {
 while(temp != EOF){
     temp = fgetc(fp0);
     retorno = mapeamento(temp);
-    fputc(retorno, fp1);
+    if(retorno == 7){
+        fputc(temp, fp1);
+    }
+    else{
+        fputc(retorno+48, fp1);
+    }
 }
   
   return 0;
