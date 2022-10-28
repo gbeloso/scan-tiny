@@ -2,31 +2,31 @@
 
 int mapeamento(char caracter){
     if(((caracter >= 65) && (caracter <= 90)) || ((caracter >= 97) && (caracter <= 122))){
-        return (48);
+        return (0);
     }
     else if((caracter>=48)&&(caracter<=57)){
-        return(49);
+        return(1);
     }
     else if((caracter == 42)||(caracter == 43)||(caracter == 45)||(caracter == 47)||(caracter == 59)||(caracter == 60)){
-        return(50);
+        return(2);
     }
     else if(caracter == 58){
-        return(51);
+        return(3);
     }
     else if(caracter == 61){
-        return(52);
+        return(4);
     }
     else if(caracter == 123){
-        return(53);
+        return(5);
     }
     else if(caracter == 125){
-        return(54);
+        return(6);
     }
     else if(caracter == 32){
-        return(55);
+        return(7);
     }
     else {
-        return(56);
+        return(8);
     }
 }
 
