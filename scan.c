@@ -123,7 +123,7 @@ int main(int argc, char ** argv) {
         {
             buffer[cont] = temp;
             buffer[cont + 1] = '\0';
-            fprintf(fp1, "Coment: %s", buffer);
+            fprintf(fp1, "Erro: %s", buffer);
             temp = '\0';
         }
         else if (estadoAtual == 7){
@@ -143,7 +143,7 @@ int main(int argc, char ** argv) {
         else if (estadoAtual == 10){
             buffer[cont] = temp;
             buffer[cont + 1] = '\0';
-            fprintf(fp1, "espaco: %s", buffer);
+            fprintf(fp1, "%s", buffer);
             temp = '\0';
         }
         else if (estadoAtual == 11)
