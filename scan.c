@@ -13,7 +13,7 @@ int mapeamento(char caracter){
     else if((caracter>=48)&&(caracter<=57)){
         return(1);
     }
-    else if((caracter == 42)||(caracter == 43)||(caracter == 45)||(caracter == 47)||(caracter == 59)||(caracter == 60)){
+    else if((caracter == 42)||(caracter == 43)||(caracter == 45)||(caracter == 47)||(caracter == 59)||(caracter == 60)||(caracter == 40)||(caracter == 41)){
         return(2);
     }
     else if(caracter == 58){
@@ -43,10 +43,10 @@ int main(int argc, char ** argv) {
     FILE * fp0;
     FILE * fp1;
     char temp = 0;
-    char buffer[50];
-    int cont;
+    char buffer[200];
+    int cont = 0;
     int estadoAtual = 0;
-    int retorno = 0;
+    int aux = 0;
 
     tabelaTransicao[0][0] = 1;
     tabelaTransicao[0][1] = 2;
@@ -90,7 +90,7 @@ int main(int argc, char ** argv) {
     tabelaTransicao[4][3] = 4;
     tabelaTransicao[4][4] = 4;
     tabelaTransicao[4][5] = 6;
-    tabelaTransicao[4][6] = 0;
+    tabelaTransicao[4][6] = 11;
     tabelaTransicao[4][7] = 4;
     tabelaTransicao[4][8] = 4;
 
@@ -99,18 +99,64 @@ int main(int argc, char ** argv) {
     if ((fp0 == NULL) || (fp1 == NULL))
         printf("deu ruim\n");
 
-    while(temp != EOF){
-        temp = fgetc(fp0);
-        retorno = mapeamento(temp);
-        if(retorno == 7){
-            fputc(temp, fp1);
+    for(int i = 0; i < 5; i++){
+        cont = 0;
+        estadoAtual = 0;
+        buffer[0] = '\0';
+        printf("iteracao: %d\n", i);
+        while(estadoAtual < 5){
+            temp = fgetc(fp0);
+            aux = mapeamento(temp);
+            estadoAtual = tabelaTransicao[estadoAtual][aux];
+            if (estadoAtual < 5)
+            {
+                buffer[cont] = temp;
+                cont++;
+            }
         }
-        else{
-            fputc(retorno+48, fp1);
+        if (estadoAtual == 5)
+        {
+            buffer[cont] = '\0';
+            fprintf(fp1, "OP: %s", buffer);
         }
-
+        else if (estadoAtual == 6)
+        {
+            buffer[cont] = temp;
+            buffer[cont + 1] = '\0';
+            fprintf(fp1, "Coment: %s", buffer);
+            temp = '\0';
+        }
+        else if (estadoAtual == 7){
+            buffer[cont] = '\0';
+            fprintf(fp1, "ID: %s", buffer);
+        }
+        else if (estadoAtual == 8){
+            buffer[cont] = '\0';
+            fprintf(fp1, "Num: %s", buffer);
+        }
+        else if (estadoAtual == 9){
+            buffer[cont] = temp;
+            buffer[cont + 1] = '\0';
+            fprintf(fp1, "Atrib: %s", buffer);
+            temp = '\0';
+        }
+        else if (estadoAtual == 10){
+            buffer[cont] = temp;
+            buffer[cont + 1] = '\0';
+            fprintf(fp1, "espaco: %s", buffer);
+            temp = '\0';
+        }
+        else if (estadoAtual == 11)
+        {
+            buffer[cont] = temp;
+            buffer[cont + 1] = '\0';
+            fprintf(fp1, "Coment: %s", buffer);
+            temp = '\0';
+        }
+        
+        printf("%d\n", estadoAtual);
+        printf("%s\n", buffer);
     }
-    
     printf("%d\n", contaLinhaCod);
     return 0;
 }
