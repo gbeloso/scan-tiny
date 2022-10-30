@@ -28,7 +28,7 @@ int mapeamento(char caracter){
     else if(caracter == 125){
         return(6);
     }
-    else if((caracter == 32)||(caracter == 0)||(caracter >= 7)&&(caracter <= 13)){
+    else if((caracter == 32)||(caracter == 0)||((caracter >= 7)&&(caracter <= 13)) || (caracter < 0)){
         if(caracter == 10){
             contaLinhaCod++;
         }
@@ -99,13 +99,13 @@ int main(int argc, char ** argv) {
     if ((fp0 == NULL) || (fp1 == NULL))
         printf("deu ruim\n");
 
-    for(int i = 0; i < 5; i++){
+    while(temp >= 0){
         cont = 0;
         estadoAtual = 0;
         buffer[0] = '\0';
-        printf("iteracao: %d\n", i);
-        while(estadoAtual < 5){
+        while((estadoAtual < 5)&&(temp != -1)){
             temp = fgetc(fp0);
+            printf("%d", temp);
             aux = mapeamento(temp);
             estadoAtual = tabelaTransicao[estadoAtual][aux];
             if (estadoAtual < 5)
@@ -116,7 +116,8 @@ int main(int argc, char ** argv) {
         }
         if (estadoAtual == 5)
         {
-            buffer[cont] = '\0';
+            buffer[cont] = temp;
+            buffer[cont + 1] = '\0';
             fprintf(fp1, "OP: %s", buffer);
         }
         else if (estadoAtual == 6)
@@ -124,7 +125,7 @@ int main(int argc, char ** argv) {
             buffer[cont] = temp;
             buffer[cont + 1] = '\0';
             fprintf(fp1, "Erro: %s", buffer);
-            temp = '\0';
+            //temp = '\0';
         }
         else if (estadoAtual == 7){
             buffer[cont] = '\0';
@@ -138,20 +139,20 @@ int main(int argc, char ** argv) {
             buffer[cont] = temp;
             buffer[cont + 1] = '\0';
             fprintf(fp1, "Atrib: %s", buffer);
-            temp = '\0';
         }
         else if (estadoAtual == 10){
-            buffer[cont] = temp;
-            buffer[cont + 1] = '\0';
-            fprintf(fp1, "%s", buffer);
-            temp = '\0';
+            if (temp >= 0)
+            {
+                buffer[cont] = temp;
+                buffer[cont + 1] = '\0';
+                fprintf(fp1, "%s", buffer);   
+            }
         }
         else if (estadoAtual == 11)
         {
             buffer[cont] = temp;
             buffer[cont + 1] = '\0';
             fprintf(fp1, "Coment: %s", buffer);
-            temp = '\0';
         }
         
         printf("%d\n", estadoAtual);
