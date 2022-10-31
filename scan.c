@@ -152,7 +152,6 @@ int main(int argc, char ** argv) {
         {
             buffer[cont] = temp;
             buffer[cont + 1] = '\0';
-            fprintf(fp1, "Coment: %s", buffer);
         }
         
         printf("%d\n", estadoAtual);
