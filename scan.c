@@ -3,9 +3,6 @@
 
 int contaLinhaCod = 0;
 
-int tabelaTransicao[5][9];
-
-
 
 int mapeamento(char caracter){
     if(((caracter >= 65) && (caracter <= 90)) || ((caracter >= 97) && (caracter <= 122))){
@@ -30,9 +27,6 @@ int mapeamento(char caracter){
         return(6);
     }
     else if((caracter == 32)||(caracter == 0)||((caracter >= 7)&&(caracter <= 13))||(caracter < 0)){
-        if(caracter == 10){
-            contaLinhaCod++;
-        }
         return(7);
     }
     else {
@@ -49,7 +43,7 @@ int main(int argc, char ** argv) {
     int estadoAtual = 0;
     int aux = 0;
     bool consome;
-
+    int tabelaTransicao[5][9];
     tabelaTransicao[0][0] = 1;
     tabelaTransicao[0][1] = 2;
     tabelaTransicao[0][2] = 5;
@@ -116,6 +110,11 @@ int main(int argc, char ** argv) {
         }
         while((estadoAtual < 5)&&(temp != -1)){
             temp = fgetc(fp0);
+            if (temp == 10)
+            {
+                contaLinhaCod++;
+            }
+            
             printf("%d", temp);
             aux = mapeamento(temp);
             estadoAtual = tabelaTransicao[estadoAtual][aux];
@@ -130,30 +129,31 @@ int main(int argc, char ** argv) {
         {
             buffer[cont] = temp;
             buffer[cont + 1] = '\0';
-            fprintf(fp1, "OP: %s ", buffer);
+            //fprintf(fp1, "<OP, %s>", buffer);
+            fprintf(fp1, "<%s, %s>", buffer,buffer);
             consome = true;
         }
         else if (estadoAtual == 6)
         {
             buffer[cont] = temp;
             buffer[cont + 1] = '\0';
-            fprintf(fp1, "Erro: %s ", buffer);
+            fprintf(fp1, "<Erro, %s>", buffer);
             consome = true;
         }
         else if (estadoAtual == 7){
             buffer[cont] = '\0';
-            fprintf(fp1, "ID: %s ", buffer);
+            fprintf(fp1, "<ID, %s>", buffer);
             consome = false;
         }
         else if (estadoAtual == 8){
             buffer[cont] = '\0';
-            fprintf(fp1, "Num: %s ", buffer);
+            fprintf(fp1, "<Num, %s>", buffer);
             consome = false;
         }
         else if (estadoAtual == 9){
             buffer[cont] = temp;
             buffer[cont + 1] = '\0';
-            fprintf(fp1, "Atrib: %s ", buffer);
+            fprintf(fp1, "<%s, %s>", buffer,buffer);
             consome = true;
         }
         else if (estadoAtual == 10){
