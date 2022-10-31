@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include<stdbool.h>
 
 int contaLinhaCod = 0;
 
@@ -28,7 +29,7 @@ int mapeamento(char caracter){
     else if(caracter == 125){
         return(6);
     }
-    else if((caracter == 32)||(caracter == 0)||((caracter >= 7)&&(caracter <= 13)) || (caracter < 0)){
+    else if((caracter == 32)||(caracter == 0)||((caracter >= 7)&&(caracter <= 13))||(caracter < 0)){
         if(caracter == 10){
             contaLinhaCod++;
         }
@@ -47,6 +48,7 @@ int main(int argc, char ** argv) {
     int cont = 0;
     int estadoAtual = 0;
     int aux = 0;
+    bool consome;
 
     tabelaTransicao[0][0] = 1;
     tabelaTransicao[0][1] = 2;
@@ -103,6 +105,15 @@ int main(int argc, char ** argv) {
         cont = 0;
         estadoAtual = 0;
         buffer[0] = '\0';
+        
+        if (!consome)
+        {
+            buffer[cont] = temp;
+            cont++;
+            aux = mapeamento(temp);
+            estadoAtual = tabelaTransicao[estadoAtual][aux];
+            temp = '\0';
+        }
         while((estadoAtual < 5)&&(temp != -1)){
             temp = fgetc(fp0);
             printf("%d", temp);
@@ -114,31 +125,36 @@ int main(int argc, char ** argv) {
                 cont++;
             }
         }
+
         if (estadoAtual == 5)
         {
             buffer[cont] = temp;
             buffer[cont + 1] = '\0';
-            fprintf(fp1, "OP: %s", buffer);
+            fprintf(fp1, "OP: %s ", buffer);
+            consome = true;
         }
         else if (estadoAtual == 6)
         {
             buffer[cont] = temp;
             buffer[cont + 1] = '\0';
-            fprintf(fp1, "Erro: %s", buffer);
-            //temp = '\0';
+            fprintf(fp1, "Erro: %s ", buffer);
+            consome = true;
         }
         else if (estadoAtual == 7){
             buffer[cont] = '\0';
-            fprintf(fp1, "ID: %s", buffer);
+            fprintf(fp1, "ID: %s ", buffer);
+            consome = false;
         }
         else if (estadoAtual == 8){
             buffer[cont] = '\0';
-            fprintf(fp1, "Num: %s", buffer);
+            fprintf(fp1, "Num: %s ", buffer);
+            consome = false;
         }
         else if (estadoAtual == 9){
             buffer[cont] = temp;
             buffer[cont + 1] = '\0';
-            fprintf(fp1, "Atrib: %s", buffer);
+            fprintf(fp1, "Atrib: %s ", buffer);
+            consome = true;
         }
         else if (estadoAtual == 10){
             if (temp >= 0)
@@ -146,12 +162,14 @@ int main(int argc, char ** argv) {
                 buffer[cont] = temp;
                 buffer[cont + 1] = '\0';
                 fprintf(fp1, "%s", buffer);   
+                consome = true;
             }
         }
         else if (estadoAtual == 11)
         {
             buffer[cont] = temp;
             buffer[cont + 1] = '\0';
+            consome = true;
         }
         
         printf("%d\n", estadoAtual);
